@@ -1,14 +1,3 @@
-#!/bin/sh
-# Copyright (c) 2017 Codenvy, S.A.
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
-# which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
-#
-# Contributors:
-#   James Drummond - Initial Implementation
-#
-
 FROM openjdk:8-jdk-alpine
 
 RUN apk update && apk add wget
@@ -30,8 +19,12 @@ RUN apk add git \
  && cp -r releng/org.eclipse.orion.server.repository/target/products/org.eclipse.orion/linux/gtk/x86_64/eclipse /usr/local/ \
  && ln /usr/local/eclipse/orion /usr/bin/orion
 
+RUN apk add pwgen
+
 ENV MAVEN_HOME /usr/share/maven
 
-COPY entrypoint.sh /
+COPY admin-OrionContent.json /
+COPY orion.ini /usr/local/eclipse/
+COPY entrypoint.sh / 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
